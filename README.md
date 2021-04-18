@@ -1,2 +1,2 @@
 # Basic_Scripting
-Automoatizing update tasks
+Automoatizing update tasks :D
