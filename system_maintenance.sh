@@ -21,29 +21,39 @@ function clean_full_update() {
   clean_packages
 }
 
-# Set up the options menu
-PS3="Seleccione la acción que desea realizar: "
-options=("Limpiar paquetes" "Actualización completa" "Actualizar todos los paquetes" "Limpiar y actualizar" "Salir")
-
-# Display the options menu and execute the corresponding function based on the user's choice
-select opt in "${options[@]}"
+while true
 do
-  case $opt in
-    "Limpiar paquetes")
-      clean_packages
-      ;;
-    "Actualización completa")
-      full_update
-      ;;
-    "Actualizar todos los paquetes")
-      update_all
-      ;;
-    "Limpiar y actualizar")
-      clean_full_update
-      ;;
-    "Salir")
-      break
-      ;;
-    *) echo "Opción inválida";;
-  esac
+  figlet -f 3d.flf -w 120 "System" | lolcat
+  figlet -f 3d.flf -w 120 "Maintenance" | lolcat
+
+  # Set up the options menu
+  PS3="Seleccione la acción que desea realizar: "
+  options=("Limpiar paquetes" "Actualización completa" "Actualizar todos los paquetes" "Limpiar y actualizar" "Salir")
+
+  # Display the options menu and execute the corresponding function based on the user's choice
+  select opt in "${options[@]}"
+  do
+    case $opt in
+      "Limpiar paquetes")
+        clean_packages
+        ;;
+      "Actualización completa")
+        full_update
+        ;;
+      "Actualizar todos los paquetes")
+        update_all
+        ;;
+      "Limpiar y actualizar")
+        clean_full_update
+        ;;
+      "Salir")
+        exit 0
+        ;;
+      *) echo "Opción inválida";;
+    esac
+
+    # Reset PS3 variable
+    PS3="Seleccione la acción que desea realizar: "
+    break
+  done
 done
