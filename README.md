@@ -12,7 +12,7 @@ Este script utiliza comandos específicos de Linux, por lo que debes tener un si
 
 <p>bash</p>
 
-<pre><code>./system-maintenance.sh
+<pre><code>./system_maintenance.sh
 </code></pre>
 
 <li>Se mostrará un menú con las siguientes opciones:</li>
