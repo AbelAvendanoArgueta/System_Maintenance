@@ -1,50 +1,40 @@
 #!/bin/bash
 
-# Detect the system distribution
-if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    OS=$NAME
-elif type lsb_release >/dev/null 2>&1; then
-    OS=$(lsb_release -si)
-else
-    OS=$(uname -s)
-fi
-
 # Function to clean up packages
 function clean_packages() {
-    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+    if command -v apt-get &>/dev/null; then
         sudo apt-get -y autoclean && sudo apt-get -y autoremove
-    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf -y clean all && sudo dnf -y autoremove
-    elif [[ $OS == *"openSUSE"* ]]; then
+    elif command -v zypper &>/dev/null; then
         sudo zypper clean -a && sudo zypper --non-interactive rm -u
-    elif [[ $OS == *"Arch"* ]]; then
+    elif command -v pacman &>/dev/null; then
         sudo pacman -Scc && sudo pacman -Rns $(pacman -Qtdq)
     fi
 }
 
 # Function to perform a full system update
 function full_update() {
-    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+    if command -v apt-get &>/dev/null; then
         sudo apt-get -y update && sudo apt-get -y full-upgrade
-    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf -y upgrade
-    elif [[ $OS == *"openSUSE"* ]]; then
+    elif command -v zypper &>/dev/null; then
         sudo zypper --non-interactive update
-    elif [[ $OS == *"Arch"* ]]; then
+    elif command -v pacman &>/dev/null; then
         sudo pacman -Syu
     fi
 }
 
 # Function to update all packages
 function update_all() {
-    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+    if command -v apt-get &>/dev/null; then
         sudo apt-get -y update && sudo apt-get -y upgrade
-    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf -y upgrade
-    elif [[ $OS == *"openSUSE"* ]]; then
+    elif command -v zypper &>/dev/null; then
         sudo zypper --non-interactive update
-    elif [[ $OS == *"Arch"* ]]; then
+    elif command -v pacman &>/dev/null; then
         sudo pacman -Syu
     fi
 }
