@@ -1,18 +1,52 @@
 #!/bin/bash
 
+# Detect the system distribution
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$NAME
+elif type lsb_release >/dev/null 2>&1; then
+    OS=$(lsb_release -si)
+else
+    OS=$(uname -s)
+fi
+
 # Function to clean up packages
 function clean_packages() {
-  sudo apt-get -y autoclean && sudo apt-get -y autoremove
+    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+        sudo apt-get -y autoclean && sudo apt-get -y autoremove
+    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+        sudo dnf -y clean all && sudo dnf -y autoremove
+    elif [[ $OS == *"openSUSE"* ]]; then
+        sudo zypper clean -a && sudo zypper --non-interactive rm -u
+    elif [[ $OS == *"Arch"* ]]; then
+        sudo pacman -Scc && sudo pacman -Rns $(pacman -Qtdq)
+    fi
 }
 
 # Function to perform a full system update
 function full_update() {
-  sudo apt-get -y update && sudo apt-get -y full-upgrade
+    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+        sudo apt-get -y update && sudo apt-get -y full-upgrade
+    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+        sudo dnf -y upgrade
+    elif [[ $OS == *"openSUSE"* ]]; then
+        sudo zypper --non-interactive update
+    elif [[ $OS == *"Arch"* ]]; then
+        sudo pacman -Syu
+    fi
 }
 
 # Function to update all packages
 function update_all() {
-  sudo apt-get -y update && sudo apt-get -y upgrade
+    if [[ $OS == *"Debian"* ]] || [[ $OS == *"Ubuntu"* ]]; then
+        sudo apt-get -y update && sudo apt-get -y upgrade
+    elif [[ $OS == *"Fedora"* ]] || [[ $OS == *"Red Hat"* ]]; then
+        sudo dnf -y upgrade
+    elif [[ $OS == *"openSUSE"* ]]; then
+        sudo zypper --non-interactive update
+    elif [[ $OS == *"Arch"* ]]; then
+        sudo pacman -Syu
+    fi
 }
 
 # Function to clean up packages and perform a full system update
