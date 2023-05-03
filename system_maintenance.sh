@@ -64,7 +64,7 @@ do
       "Actualización completa")
         full_update
         ;;
-      "Actualizar todos los paquetes")
+      "Actualización de paquetes")
         update_all
         ;;
       "Limpiar y actualizar")
